@@ -2,6 +2,7 @@ use std::net::{TcpListener, TcpStream};
 use std::io::Read;
 use std::thread;
 mod client_mem;
+mod configuration;
 
 
 fn handle_client(mut client: TcpStream){

@@ -14,7 +14,7 @@ Feature list
 
 - [x] Client cache
 - [x] TCP Connection
-- [x] Multitheading client handling
+- [x] Multithreading client handling
 - [ ] Configuration File
 - [ ] UDP Connection
 - [ ] HTTP Connection
