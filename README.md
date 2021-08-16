@@ -9,5 +9,16 @@ This proxy server you can execute it and use it as middle connection, in future 
 This server will have TCP, UDP and HTTP connections.
 
 ---
+Feature list
+---
+
+- [x] Client cache
+- [x] TCP Connection
+- [x] Multitheading client handling
+- [ ] Configuration File
+- [ ] UDP Connection
+- [ ] HTTP Connection
+
+---
 Edited on: 16/08/2021
 ---

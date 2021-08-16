@@ -37,7 +37,7 @@ pub fn send_message_to_clients(ip: String, data_msg: &[u8]){
     unsafe{
         for current_client in &CLIENT_LIST {
             if current_client.ip != ip {
-                println!("Sending Message to ip: {}", current_client.ip);
+                println!("Sending Peer Message: {} --> {}", ip, current_client.ip);
                 (*current_client.client).write_all(data_msg).unwrap();
             }
         }

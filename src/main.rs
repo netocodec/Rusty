@@ -11,7 +11,7 @@ fn handle_client(mut client: TcpStream){
         Ok(size) => {
             if size != 0 {
                 let ip = client_mem::get_client_ip(&mut client);
-                println!("Size of the message on client connection: {}", size);
+
                 client_mem::send_message_to_clients(ip, &data_msg[0..size]);
                 true
             }else{
