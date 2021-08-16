@@ -1,5 +1,5 @@
 use std::net::{TcpListener, TcpStream};
-use std::io::{Read};
+use std::io::Read;
 use std::thread;
 mod client_mem;
 
@@ -12,7 +12,6 @@ fn handle_client(mut client: TcpStream){
             if size != 0 {
                 let ip = client_mem::get_client_ip(&mut client);
                 println!("Size of the message on client connection: {}", size);
-
                 client_mem::send_message_to_clients(ip, &data_msg[0..size]);
                 true
             }else{
@@ -29,15 +28,15 @@ fn handle_client(mut client: TcpStream){
 }
 
 fn main() {
-    let listener = TcpListener::bind("127.0.0.1:7005").unwrap();
+    let listener = TcpListener::bind("0.0.0.0:7005").unwrap();
 
     for client in listener.incoming(){
         match client{
             Ok(mut client) => {
                 println!("New client is connected!");
 
-                client_mem::add_client(&mut client);
                 thread::spawn(move|| {
+                    client_mem::add_client(&mut client);
                     handle_client(client);
                 });
             },
