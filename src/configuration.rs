@@ -40,7 +40,7 @@ pub fn load_config() {
     match file {
         Ok(file) => {
             let mut buf_reader = BufReader::new(file);
-            buf_reader.read_to_string(&mut contents);
+            buf_reader.read_to_string(&mut contents).unwrap();
 
             unsafe{
                 CONFIGURATION = serde_json::from_str(&mut contents).unwrap();
@@ -52,7 +52,7 @@ pub fn load_config() {
                     unsafe{
                         let serialized = serde_json::to_string(&CONFIGURATION).unwrap();
 
-                        fc.write_all(serialized.as_bytes());
+                        fc.write_all(serialized.as_bytes()).unwrap();
                     }
                 },
                 Err(e) => panic!("Problem creating the file: {:?}", e),
