@@ -12,8 +12,16 @@ const FILENAME: &str = "config.conf";
 static mut CONFIGURATION: FileContent = FileContent{
     port: 7005,
     max_clients: 10,
+    connection_type: ConnectionType::TCP,
     blacklist_ips: []
 };
+
+#[derive(Serialize, Deserialize, PartialEq, Debug)]
+enum ConnectionType{
+    TCP,
+    UDP,
+    HTTP
+}
 
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
 struct FileContent {
@@ -21,6 +29,8 @@ struct FileContent {
     port: u16,
     #[serde(default="default_max_clients")]
     max_clients: u16,
+    #[serde(default="default_connection")]
+    connection_type: ConnectionType,
     blacklist_ips: [String; 0]
 }
 
@@ -32,6 +42,9 @@ fn default_max_clients() -> u16 {
     10
 }
 
+fn default_connection() -> ConnectionType {
+    ConnectionType::TCP
+}
 
 pub fn load_config() {
     let mut contents = String::new();
@@ -80,10 +93,10 @@ pub fn show_info_conf() {
         println!("---- Rusty V0.1 BETA ----");
         println!("-------------------------");
 
-
         println!("IP: 0.0.0.0");
         println!("PORT: {}", CONFIGURATION.port);
         println!("MAX Clients: {}", CONFIGURATION.max_clients);
+        println!("Connection Type: {:?}", CONFIGURATION.connection_type);
         println!("Number of blocked IPS: {}", CONFIGURATION.blacklist_ips.len());
 
         println!("-------------------------");
@@ -112,7 +125,6 @@ mod tests{
 
     #[test]
     fn test_read_file(){
-        println!("Done!");
         load_config();
     }
 

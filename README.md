@@ -17,7 +17,6 @@ Feature list
 - [x] Multithreading client handling
 - [x] Configuration File
 - [ ] UDP Connection
-- [ ] HTTP Connection
 
 ---
 Edited on: 17/08/2021

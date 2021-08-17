@@ -51,7 +51,7 @@ fn main() {
         match client{
             Ok(mut client) => {
                 let ip = client_mem::get_client_ip(&mut client);
-                println!("New client is connected!");
+                println!("New client is connected! (IP: {})", ip);
 
                 thread::spawn(move|| {
                     if is_user_allowed(ip) == 1 {
