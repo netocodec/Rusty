@@ -29,7 +29,10 @@ pub fn add_client(client: &mut TcpStream){
 pub fn remove_client(ip: &String){
     unsafe{
         let client = get_client_id(ip);
-        CLIENT_LIST.remove(client as usize);
+
+        if client != -1 {
+            CLIENT_LIST.remove(client as usize);
+        }
     }
 }
 
@@ -52,15 +55,25 @@ pub fn get_client_ip(client: &mut TcpStream) -> String{
 pub fn get_client_id(ip: &String) -> i32 {
     unsafe {
         let mut result:i32 = -1;
+        let mut c:i32 = -1;
+
         for client in &CLIENT_LIST{
-            result+=1;
+            c+=1;
 
             if &client.ip == ip {
+                result = c;
                 break;
             }
         }
 
         result
+    }
+}
+
+
+pub fn get_connected_clients() -> usize{
+    unsafe{
+        CLIENT_LIST.len()
     }
 }
 
