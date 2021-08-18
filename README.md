@@ -8,6 +8,8 @@ This proxy server you can execute it and use it as middle connection, in future 
 
 This server will have TCP, UDP and HTTP connections.
 
+[Rusty Documentation](https://netocodec.github.io/rusty-docs/)
+
 ---
 Feature list
 ---
@@ -19,5 +21,5 @@ Feature list
 - [ ] UDP Connection
 
 ---
-Edited on: 17/08/2021
+Edited on: 18/08/2021
 ---
