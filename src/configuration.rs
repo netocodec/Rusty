@@ -7,8 +7,10 @@ use std::io::BufReader;
 use serde::{Serialize, Deserialize};
 
 
+/// Filename of the configuration.
 const FILENAME: &str = "config.conf";
 
+/// Configuration memory structures and his default values.
 static mut CONFIGURATION: FileContent = FileContent{
     port: 7005,
     max_clients: 10,
@@ -16,36 +18,48 @@ static mut CONFIGURATION: FileContent = FileContent{
     blacklist_ips: []
 };
 
+/// Connections type
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
 enum ConnectionType{
+    /// TCP Connection
     TCP,
-    UDP,
-    HTTP
+    /// UDP Connection
+    UDP
 }
 
+/// File content structure
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
 struct FileContent {
+    /// Port of the server
     #[serde(default="default_port")]
     port: u16,
+    /// Max clients of the server
     #[serde(default="default_max_clients")]
     max_clients: u16,
+    /// Connection type of the server
     #[serde(default="default_connection")]
     connection_type: ConnectionType,
+    /// Blacklist of the clients IP
     blacklist_ips: [String; 0]
 }
 
+/// Default port of the server
 fn default_port() -> u16 {
     7005
 }
 
+/// Default max clients of the server
 fn default_max_clients() -> u16 {
     10
 }
 
+/// Default connection type of the server
 fn default_connection() -> ConnectionType {
     ConnectionType::TCP
 }
 
+/// This function will load all the configuration file data and puts into memory
+/// If the file does not exists then it will create it and put the default data.
 pub fn load_config() {
     let mut contents = String::new();
     let file = File::open(FILENAME);
@@ -74,12 +88,14 @@ pub fn load_config() {
     };
 }
 
+/// Gets the port of the server.
 pub fn get_port() -> u16 {
     unsafe {
         CONFIGURATION.port
     }
 }
 
+/// Gets the max clients of the server.
 pub fn get_max_clients() -> usize {
     unsafe{
         CONFIGURATION.max_clients as usize
@@ -87,6 +103,7 @@ pub fn get_max_clients() -> usize {
 }
 
 
+/// This function will output the configuration data into the screen.
 pub fn show_info_conf() {
     unsafe {
         println!("-------------------------");
@@ -103,7 +120,7 @@ pub fn show_info_conf() {
     }
 }
 
-
+/// This will check if the IP is on the blacklist or not.
 pub fn check_ip_blacklist(ip: &String) -> u8 {
     let mut result = 0;
 

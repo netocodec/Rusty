@@ -6,6 +6,7 @@ mod client_mem;
 mod configuration;
 
 
+/// Handle funnction of the client connection.
 fn handle_client(mut client: TcpStream){
     let mut data_msg = [0 as u8; 50];
 
@@ -29,6 +30,8 @@ fn handle_client(mut client: TcpStream){
     }{}
 }
 
+/// This will check if the ip client is on the blacklist or the server reaches te maximum client
+/// number.
 fn is_user_allowed(ip: String) -> u8 {
     let mut result = 1;
     let is_blacklisted = configuration::check_ip_blacklist(&ip);
