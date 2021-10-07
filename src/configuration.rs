@@ -6,6 +6,9 @@ use std::io::prelude::*;
 use std::io::BufReader;
 use serde::{Serialize, Deserialize};
 
+#[path = "client_mem.rs"]
+mod client_mem;
+
 
 /// Filename of the configuration.
 const FILENAME: &str = "config.conf";
@@ -19,8 +22,8 @@ static mut CONFIGURATION: FileContent = FileContent{
 };
 
 /// Connections type
-#[derive(Serialize, Deserialize, PartialEq, Debug)]
-enum ConnectionType{
+#[derive(Clone, Copy, Serialize, Deserialize, PartialEq, Debug)]
+pub enum ConnectionType{
     /// TCP Connection
     TCP,
     /// UDP Connection
@@ -102,6 +105,13 @@ pub fn get_max_clients() -> usize {
     }
 }
 
+/// Gets the connection type of the server.
+pub fn get_connection_type() -> ConnectionType{
+    unsafe{
+        CONFIGURATION.connection_type
+    }
+}
+
 
 /// This function will output the configuration data into the screen.
 pub fn show_info_conf() {
@@ -131,6 +141,22 @@ pub fn check_ip_blacklist(ip: &String) -> u8 {
                 break;
             }
         }
+    }
+
+    result
+}
+
+
+/// This will check if the ip client is on the blacklist or the server reaches te maximum client
+/// number.
+pub fn is_user_allowed(ip: String) -> u8 {
+    let mut result = 1;
+    let is_blacklisted = check_ip_blacklist(&ip);
+    let current_user_number = client_mem::get_connected_clients();
+    let max_clients = get_max_clients();
+
+    if is_blacklisted == 1 || current_user_number >= max_clients {
+        result = 0;
     }
 
     result

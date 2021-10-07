@@ -1,4 +1,4 @@
-use std::net::{TcpStream, Shutdown};
+use std::net::{TcpStream, Shutdown, SocketAddr};
 use std::io::Write;
 
 /// This is the memory sector of the client list.
@@ -57,6 +57,11 @@ pub fn send_message_to_clients(ip: String, data_msg: &[u8]){
 /// Gets the client IP.
 pub fn get_client_ip(client: &mut TcpStream) -> String{
     client.peer_addr().unwrap().ip().to_string()
+}
+
+/// Gets the udp client IP.
+pub fn get_udp_client_ip(client: &mut SocketAddr) -> String{
+    client.ip().to_string()
 }
 
 
