@@ -1,5 +1,6 @@
-use std::net::{TcpStream, Shutdown, SocketAddr};
+use std::net::{TcpStream, Shutdown, SocketAddr, UdpSocket};
 use std::io::Write;
+use std::ptr;
 
 /// This is the memory sector of the client list.
 static mut CLIENT_LIST: Vec<ClientItem> = Vec::new();
@@ -9,7 +10,9 @@ struct ClientItem{
     /// Ip of the client
     ip: String,
     /// Client Object
-    client: *mut TcpStream
+    client: *mut TcpStream,
+    /// UDP Client Object
+    udp_client: *mut UdpSocket
 }
 
 
@@ -27,7 +30,16 @@ pub fn add_client(client: &mut TcpStream){
     unsafe{
         let ip = get_client_ip(client);
 
-        CLIENT_LIST.insert(CLIENT_LIST.len(), ClientItem{ ip: ip, client: client });
+        CLIENT_LIST.insert(CLIENT_LIST.len(), ClientItem{ ip: ip, client: client, udp_client: ptr::null_mut() });
+    }
+}
+
+/// This will add the udp client into the memory vector
+pub fn add_udp_client(client: &mut UdpSocket, src: &mut SocketAddr){
+    unsafe {
+        let ip = get_udp_client_ip(src);
+
+        CLIENT_LIST.insert(CLIENT_LIST.len(), ClientItem{ ip: ip, client: ptr::null_mut(), udp_client: client });
     }
 }
 

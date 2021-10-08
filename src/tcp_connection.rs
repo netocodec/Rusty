@@ -35,7 +35,7 @@ fn handle_client(mut client: TcpStream){
 
 
 
-pub fn start_connection(){
+pub async fn start_connection(){
     let listener = TcpListener::bind(format!("0.0.0.0:{}", configuration::get_port())).unwrap();
     for client in listener.incoming(){
         match client{

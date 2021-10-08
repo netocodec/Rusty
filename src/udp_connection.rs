@@ -14,14 +14,14 @@ fn handle_client(socket: &mut UdpSocket){
     let ip = client_mem::get_udp_client_ip(&mut src);
 
     println!("New client is connected! (IP: {})", ip);
+    client_mem::add_udp_client(socket, &mut src);
 
-    let buf = &mut buf[..amt];
-    socket.send_to(buf, &src).unwrap();
+    //let buf = &mut buf[..amt];
 }
 
 
 /// Starts the connection of the UDP server.
-pub fn start_connection(){
+pub async fn start_connection(){
     let mut socket = UdpSocket::bind(format!("0.0.0.0:{}", configuration::get_port())).unwrap();
     loop {
         let mut buf = [0; 50];
