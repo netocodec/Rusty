@@ -117,7 +117,7 @@ pub fn get_connection_type() -> ConnectionType{
 pub fn show_info_conf() {
     unsafe {
         println!("-------------------------");
-        println!("---- Rusty V0.1 BETA ----");
+        println!("------ Rusty V0.1 -------");
         println!("-------------------------");
 
         println!("IP: 0.0.0.0");
