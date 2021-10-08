@@ -6,9 +6,12 @@ use std::ptr;
 static mut CLIENT_LIST: Vec<ClientItem> = Vec::new();
 
 /// Structure of the Client.
+#[derive(Debug)]
 struct ClientItem{
     /// Ip of the client
     ip: String,
+    /// Socket Origin
+    net_origin: *mut SocketAddr,
     /// Client Object
     client: *mut TcpStream,
     /// UDP Client Object
@@ -30,7 +33,7 @@ pub fn add_client(client: &mut TcpStream){
     unsafe{
         let ip = get_client_ip(client);
 
-        CLIENT_LIST.insert(CLIENT_LIST.len(), ClientItem{ ip: ip, client: client, udp_client: ptr::null_mut() });
+        CLIENT_LIST.insert(CLIENT_LIST.len(), ClientItem{ ip: ip, client: client, net_origin: ptr::null_mut(), udp_client: ptr::null_mut() });
     }
 }
 
@@ -39,7 +42,10 @@ pub fn add_udp_client(client: &mut UdpSocket, src: &mut SocketAddr){
     unsafe {
         let ip = get_udp_client_ip(src);
 
-        CLIENT_LIST.insert(CLIENT_LIST.len(), ClientItem{ ip: ip, client: ptr::null_mut(), udp_client: client });
+        if get_client_id(&ip) == -1 {
+            CLIENT_LIST.insert(CLIENT_LIST.len(), ClientItem{ ip: ip, client: ptr::null_mut(), net_origin: src, udp_client: client });
+
+        }
     }
 }
 
@@ -60,7 +66,11 @@ pub fn send_message_to_clients(ip: String, data_msg: &[u8]){
         for current_client in &CLIENT_LIST {
             if current_client.ip != ip {
                 println!("Sending Peer Message: {} --> {}", ip, current_client.ip);
-                (*current_client.client).write_all(data_msg).unwrap();
+                if !current_client.client.is_null() {
+                    (*current_client.client).write_all(data_msg).unwrap();
+                }else{
+                    (*current_client.udp_client).send_to(data_msg, &current_client.ip).unwrap();
+                }
             }
         }
     }
@@ -73,7 +83,7 @@ pub fn get_client_ip(client: &mut TcpStream) -> String{
 
 /// Gets the udp client IP.
 pub fn get_udp_client_ip(client: &mut SocketAddr) -> String{
-    client.ip().to_string()
+    format!("{}:{}", client.ip().to_string(), client.port().to_string())
 }
 
 
