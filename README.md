@@ -18,8 +18,8 @@ Feature list
 - [x] TCP Connection
 - [x] Multithreading client handling
 - [x] Configuration File
-- [ ] UDP Connection
+- [x] UDP Connection
 
 ---
-Edited on: 18/08/2021
+Edited on: 08/10/2021
 ---
